@@ -1,0 +1,192 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>全國休閒農業區旅遊資訊</title>
+    <meta name="viewport" content="width=device-width" />
+    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+    <style>
+       #container{
+           padding:50px;
+       }
+        h1 {
+            text-align: center;
+            font-weight: bold;
+            font-size: 48px;
+            color: #04240d;
+            font-family: 標楷體;
+        }
+        body {
+     
+            background-image:url(images/green2.png);
+            
+        }
+         #map{
+            width:25px;
+            height:25px;
+        }
+         #google{
+              width:50px;
+            height:25px;
+          
+         }
+        .hiddenWord {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            white-space: normal;
+        }
+        #form{
+            margin:auto;
+             padding: 55px;
+
+        }
+       #info{
+           height:500px;
+       }
+           
+       
+      
+/*Bootstrap*/
+        .modal-footer {
+            justify-content: space-between !important;
+        }
+        
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light  alert alert-success">
+  <a class="navbar-brand" onclick="getTravelData()"><h1 class="center">全國休閒農業區旅遊資訊</h1></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+         <li class="nav-item active">
+        <a class="nav-link" href="http://localhost:52321/%E5%89%8D%E7%AB%AF%E4%BD%9C%E6%A5%AD5.html"><strong>首頁</strong> <span class="sr-only">(current)</span></a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input id="txtCity" type="text" class="form-control" placeholder="輸入城市查詢" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2" onclick="getTravelData()">查詢</span>
+                </div>
+    </form>
+  </div>
+</nav>
+     <marquee><h5 style="font-family:標楷體"><strong>資料來源:政府資料開放平台-全國休閒農業區旅遊資訊</strong></h5></marquee>
+   
+  
+    
+     
+
+
+    <div id="container"class="row">
+       
+       
+
+       
+    </div>
+    
+
+
+    <script src="Scripts/jquery-3.6.0.min.js"></script>
+    <script src="Scripts/bootstrap.bundle.min.js"></script>
+    <script>
+      
+
+       
+        var item = "";
+        $('#container').append("<div id='TravelData'></div>")
+        getTravelData();
+        function getTravelData() {
+            $('#TravelData').empty();
+            $.ajax({
+                type: 'get',
+                url: `https://data.coa.gov.tw/Service/OpenData/ODwsv/ODwsvAttractions.aspx?$filter=City+like+${$('#txtCity').val()}`,
+                success: function (data) {
+                    console.log(data);
+
+
+                    for (var i = 0; i < data.length; i++) {
+                        item = `<div style="float:left; background-image:url(images/pngtree-green-hazy-background-material-ink-plain-color-simple-white-clouds-image_988234.jpg);" class="card col-12 col-sm-6 col-md-4 p-3  border-primary">
+                                <div>
+                                <img src="${data[i].Photo}" class="card-img-top">
+                                </div>
+                                <div class="card-body text-center p-2">
+                                    
+                                         <h2 class="card-title" >${data[i].Name}</h2>
+                                         <h5 class="card-text"> ${data[i].City} ${data[i].Town}</h4>
+                                         <hr/>
+
+
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}">
+                                        詳細資料
+                                    </button>
+                               </div>
+                            </div>
+
+
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal${i}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-xl" >
+                                  
+                                    <div class="modal-content;haikei"style="background-image:url(images/31291740-L-imagenavi.jpg);">
+                                        <div class="modal-header">
+                                            <div>
+                                            <h1 class="modal-title m-auto" id="exampleModalLabel">${data[i].Name}</h1>
+                                            <a href="https://www.google.com.tw/search?q=${data[i].Name}"><img src="images/google_PNG19631.png" title="搜尋google"id="google" /></a>
+                                            </div>
+                                            <button type="button" class="close m-0 p-0" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body row">
+                                            <div class="col-6">
+                                                <img src="${data[i].Photo}" class="card-img-top">
+                                            </div>
+                                            <div class="col-6">
+                                                
+                                                <div class="card-text " style="background: #DEFFFF;">${data[i].Introduction}</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="modal-footer"style="background: #ffffff;">
+                                            <div>
+                                                <h4 class="card-text hiddenWord text-left">電話：${data[i].Tel}</h4>
+                                                <div class="d-flex">
+                                                    <h4 class="card-text text-left" ">地址：${data[i].Address}</h4>
+                                                     <a href="https://www.google.com.tw/maps/search/${data[i].Address}" target="_blank" class="info"><img id="map" src="images/map.jpg"title="我是Google map"/></a>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                           
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">返回列表</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                                 `
+
+                        $('#TravelData').append(item);
+                    }
+
+
+                }
+
+            
+            });
+            }
+        $('#myModal').on('shown.bs.modal', function () {
+            $('#myInput').trigger('focus')
+        })
+    </script>
+
+</body>
+</html>
